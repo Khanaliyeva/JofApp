@@ -2,11 +2,14 @@
 using JofApp.DAL;
 using JofApp.Helpers;
 using JofApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace JofApp.Areas.Manage.Controllers
 {
+    [AutoValidateAntiforgeryToken]
+    [Authorize(Roles ="Admin")]
     [Area("Manage")]
     public class FruitsController : Controller
     {

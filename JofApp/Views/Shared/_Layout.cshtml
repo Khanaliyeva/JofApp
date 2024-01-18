@@ -57,11 +57,24 @@
                                         <li class="active"><a href="#home">Home</a></li>
                                         <li><a href="#about">About Us</a></li>
                                         <li><a href="#fruits">Fruits</a></li>
+                                        @if(User.Identity.Name=="Emil23"){
+
                                         <li><a asp-area="Manage" asp-action="Index" asp-controller="Fruits">Products</a></li>
+                                        }
+                                        @if(!User.Identity.IsAuthenticated)
+                                        {
                                         <li>
                                             <a asp-action="Login" asp-controller="Account">Login </a>
                                             <a asp-action="Register" asp-controller="Account">Register </a>
                                             </li>
+
+                                        }
+                                        else{
+                                            <li>
+                                                <a asp-action="LogOut" asp-controller="Account">LogOut </a>
+                                                <a>@User.Identity.Name </a>
+                                            </li>
+                                        }
                                     </ul>
                                 </nav>
                             </div>

@@ -1,4 +1,5 @@
-﻿using JofApp.Models;
+﻿using JofApp.Helpers;
+using JofApp.Models;
 using JofApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,7 @@ namespace JofApp.Controllers
                 Email = registerVm.Email
             };
 
+
         
 
             var result=await _userManager.CreateAsync(appUser, registerVm.Password);
@@ -46,7 +48,10 @@ namespace JofApp.Controllers
                 {
                     ModelState.AddModelError("", item.Description);
                 }
-            }          
+            }
+
+            await _userManager.AddToRoleAsync(appUser, UserRole.User.ToString());
+
             return RedirectToAction(nameof(Login));
         }
 
@@ -82,5 +87,27 @@ namespace JofApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> LogOut()
+        {
+            await  _signInManager.SignOutAsync();
+            return RedirectToAction("Index","Home");
+        }
+
+
+
+        public async Task CreateRole()
+        {
+
+            foreach (var item in Enum.GetNames(typeof(UserRole)))
+            {
+                if(!await _roleManager.RoleExistsAsync(item.ToString()))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole()
+                    {
+                        Name = item.ToString()
+                    });
+                }
+            }
+        }
     }
 }
